@@ -6,4 +6,4 @@ interface IApp {
   state: AppState;
 }
 
-type AppState = "opened" | "closed" | "opening";
+export type AppState = "opened" | "closed" | "opening";
