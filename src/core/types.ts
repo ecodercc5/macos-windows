@@ -7,3 +7,9 @@ interface IApp {
 }
 
 export type AppState = "opened" | "closed" | "opening";
+
+export type AppStatus = AppState;
+
+export interface IAppState {
+  apps: IApp[];
+}
