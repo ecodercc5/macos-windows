@@ -1,9 +1,8 @@
-export const a = [];
-
-interface IApp {
+export interface IApp {
   name: string;
   icon: string;
-  state: AppState;
+  status: AppState;
+  id: string;
 }
 
 export type AppState = "opened" | "closed" | "opening";

@@ -3,14 +3,31 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import "./core/state";
+import { AppState } from "./providers/AppState";
+import { Store } from "./core/store";
+import { IAppState } from "./core/types";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+const DEFAULT_APP_STATE: IAppState = {
+  apps: [
+    {
+      name: "Finder",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/c/c9/Finder_Icon_macOS_Big_Sur.png",
+      id: "finder",
+      status: "closed",
+    },
+  ],
+};
+const appState$ = Store.create<IAppState>(DEFAULT_APP_STATE);
+
 root.render(
   <React.StrictMode>
-    <App />
+    <AppState state={appState$}>
+      <App />
+    </AppState>
   </React.StrictMode>
 );
 
