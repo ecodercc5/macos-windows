@@ -3,7 +3,12 @@ import { map } from "rxjs";
 import { Store } from "../core/store";
 import { IApp, IAppState } from "../core/types";
 import { useAppState } from "../providers/AppState";
-import { useObserveState } from "./use-observe-state";
+import {
+  useExperimentalObserveState,
+  useObserveState,
+  useObserveState_,
+  useObserveState__,
+} from "./use-observe-state";
 
 export const useMacOSApp = (
   appId: string
@@ -38,5 +43,5 @@ export const useMacOSApp = (
     });
   };
 
-  return [useObserveState(macosApp$), { open }];
+  return [useExperimentalObserveState(macosApp$), { open }];
 };

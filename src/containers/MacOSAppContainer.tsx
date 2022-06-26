@@ -9,6 +9,8 @@ interface Props {
 export const MacOSAppContainer: React.FC<Props> = ({ appId }) => {
   const [macosApp, { open }] = useMacOSApp(appId);
 
+  console.log(macosApp);
+
   if (!macosApp) {
     return null;
   }
