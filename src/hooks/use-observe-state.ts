@@ -162,9 +162,15 @@ export const useExperimentalObserveState = <T>(state$: ReadState<T>) => {
   const [state, setState] = useState<T>(() => Store.get(state$));
 
   useEffect(() => {
-    const subscription = state$.subscribe(setState);
+    const subscription = state$.subscribe((val) => {
+      // console.log(val);
+      setState(val);
+    });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log("unsubscribing");
+      subscription.unsubscribe();
+    };
   }, [state$]);
 
   return state;

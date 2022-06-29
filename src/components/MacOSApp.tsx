@@ -1,7 +1,7 @@
 import { AppStatus } from "../core/types";
 import { motion } from "framer-motion";
 import { useInfiniteBounce } from "../hooks/use-infinite-bounce";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface Props {
   icon: string;

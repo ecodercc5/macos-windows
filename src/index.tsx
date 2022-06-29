@@ -19,9 +19,7 @@ const defaultWindow: IMacOSWindow = {
 };
 
 const DEFAULT_APP_STATE: IAppState = {
-  windows: {
-    "123": defaultWindow,
-  },
+  windows: {},
   apps: [
     {
       name: "Finder",
@@ -34,11 +32,11 @@ const DEFAULT_APP_STATE: IAppState = {
 const appState$ = Store.create<IAppState>(DEFAULT_APP_STATE);
 
 root.render(
-  <React.StrictMode>
-    <AppState state={appState$}>
-      <App />
-    </AppState>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <AppState state={appState$}>
+    <App />
+  </AppState>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,23 +1,42 @@
 import { useMemo } from "react";
-import { map } from "rxjs";
+import { distinctUntilChanged, map } from "rxjs";
 import { useAppState } from "../providers/AppState";
 import { useExperimentalObserveState } from "./use-observe-state";
 import memoize from "memoizee";
-import { IAppState } from "../core/types";
+import { IMacOSWindows } from "../core/macos-window";
+import { Store } from "../core/store";
+import { AppState, IAppState } from "../core/types";
 
-const getWindows = memoize((appState: IAppState) => {
-  return Object.values(appState.windows);
+const getWindows = memoize((windows: IMacOSWindows) => {
+  return Object.values(windows);
 });
 
 export const useMacOSWindows = () => {
   const appState$ = useAppState();
   const windows$ = useMemo(() => {
     return appState$.pipe(
-      map(getWindows)
-      //   map((appState) => appState.windows),
-      //   map((windows) => Object.values(windows))
+      map((appState) => getWindows(appState.windows)),
+      distinctUntilChanged()
     );
   }, [appState$]);
 
   return useExperimentalObserveState(windows$);
+};
+
+export const useMacOSWindowMutations = (appId: string) => {
+  const appState$ = useAppState();
+
+  const close = () => {
+    Store.update(appState$, (appState): IAppState => {
+      return {
+        ...appState,
+        windows: {},
+        apps: appState.apps.map((app) =>
+          app.id === appId ? { ...app, status: "closed" } : app
+        ),
+      };
+    });
+  };
+
+  return { close };
 };

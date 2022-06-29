@@ -20,6 +20,8 @@ export namespace Store {
   };
 
   export const set = <T>(state: State<T>, value: T) => {
+    console.log("[setting]");
+
     return state.next(value);
   };
 

@@ -27,7 +27,5 @@ export const useAppIds = () => {
     );
   }, [appState$]);
 
-  const appIds = useExperimentalObserveState(appIds$);
-
-  return appIds;
+  return useExperimentalObserveState(appIds$);
 };

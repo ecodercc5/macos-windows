@@ -14,8 +14,8 @@ function App() {
   const [, setState] = useState({});
 
   // console.log("Yo");
-  console.log(appIds);
-  console.log(windows);
+  // console.log(appIds);
+  // console.log(windows);
 
   return (
     <div className="App">

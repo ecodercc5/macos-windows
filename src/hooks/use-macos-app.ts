@@ -1,10 +1,11 @@
-import { useMemo } from "react";
-import { map } from "rxjs";
+import { useEffect, useMemo } from "react";
+import { distinctUntilChanged, map } from "rxjs";
 import { Store } from "../core/store";
 import { IApp, IAppState } from "../core/types";
 import { useAppState } from "../providers/AppState";
 import { useExperimentalObserveState } from "./use-observe-state";
 import memoize from "memoizee";
+import { MacOSWindow } from "../core/macos-window";
 
 const getAppIds = memoize((apps: IApp[], appId: string) => {
   return apps.find((app) => app.id === appId);
@@ -17,11 +18,15 @@ export const useMacOSApp = (
 
   const macosApp$ = useMemo(() => {
     return appState$.pipe(
-      // map((appState) => appState.apps.find((app) => app.id === appId))
       map((appState) => appState.apps),
-      map((apps) => getAppIds(apps, appId))
+      map((apps) => getAppIds(apps, appId)),
+      distinctUntilChanged()
     );
   }, [appState$, appId]);
+
+  useEffect(() => {
+    // macosApp$.subscribe(console.log);
+  }, [macosApp$]);
 
   const open = () => {
     Store.update(appState$, (appState): IAppState => {
@@ -33,17 +38,35 @@ export const useMacOSApp = (
       };
     });
 
-    Promise.resolve().then(() => {
+    setTimeout(() => {
       Store.update(appState$, (appState): IAppState => {
+        const window = MacOSWindow.create({ appId });
+
         return {
           ...appState,
           apps: appState.apps.map((app) =>
             app.id === appId ? { ...app, status: "opened" } : app
           ),
+          windows: {
+            [window.id]: window,
+          },
         };
       });
-    });
+    }, 1000);
+
+    // Promise.resolve().then(() => {
+    //   Store.update(appState$, (appState): IAppState => {
+    //     return {
+    //       ...appState,
+    //       apps: appState.apps.map((app) =>
+    //         app.id === appId ? { ...app, status: "opened" } : app
+    //       ),
+    //     };
+    //   });
+    // });
   };
 
-  return [useExperimentalObserveState(macosApp$), { open }];
+  const app = useExperimentalObserveState(macosApp$);
+
+  return [app, { open }];
 };
