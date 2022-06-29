@@ -6,12 +6,22 @@ import reportWebVitals from "./reportWebVitals";
 import { AppState } from "./providers/AppState";
 import { Store } from "./core/store";
 import { IAppState } from "./core/types";
+import { IMacOSWindow } from "./core/macos-window";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
+const defaultWindow: IMacOSWindow = {
+  appId: "finder",
+  id: "123",
+  mode: "exact",
+};
+
 const DEFAULT_APP_STATE: IAppState = {
+  windows: {
+    "123": defaultWindow,
+  },
   apps: [
     {
       name: "Finder",

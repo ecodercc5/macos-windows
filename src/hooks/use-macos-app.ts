@@ -3,12 +3,12 @@ import { map } from "rxjs";
 import { Store } from "../core/store";
 import { IApp, IAppState } from "../core/types";
 import { useAppState } from "../providers/AppState";
-import {
-  useExperimentalObserveState,
-  useObserveState,
-  useObserveState_,
-  useObserveState__,
-} from "./use-observe-state";
+import { useExperimentalObserveState } from "./use-observe-state";
+import memoize from "memoizee";
+
+const getAppIds = memoize((apps: IApp[], appId: string) => {
+  return apps.find((app) => app.id === appId);
+});
 
 export const useMacOSApp = (
   appId: string
@@ -17,7 +17,9 @@ export const useMacOSApp = (
 
   const macosApp$ = useMemo(() => {
     return appState$.pipe(
-      map((appState) => appState.apps.find((app) => app.id === appId))
+      // map((appState) => appState.apps.find((app) => app.id === appId))
+      map((appState) => appState.apps),
+      map((apps) => getAppIds(apps, appId))
     );
   }, [appState$, appId]);
 
